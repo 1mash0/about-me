@@ -13,7 +13,7 @@ struct UserProfileFormView: View {
     @State private var showIconDialog = false
     
     var body: some View {
-        VStack(spacing: 0) {
+        VStack(spacing: 10) {
             // MARK: Icon
             VStack(alignment: .center) {
                 Button {
@@ -24,17 +24,17 @@ struct UserProfileFormView: View {
                 .clipShape(Circle())
                 .frame(width: 150, height: 150)
                 .confirmationDialog(
-                    "アイコン画像の変更",
+                    "CHANGE_ICON_TEXT",
                     isPresented: $showIconDialog,
                     titleVisibility: .visible
                 ) {
-                    Button("GitHub から取得") {
+                    Button("GET_ICON_FROM_GITHUB") {
                         // TODO: GitHubからアイコン画像を取得する処理
                         self.showIconDialog = false
                         user.iconUrl = "https://avatars.githubusercontent.com/u/52849416?v=4"
                     }.disabled(user.githubID == nil)
                     
-                    Button("X から取得") {
+                    Button("GET_ICON_FROM_X") {
                         // TODO: Xからアイコン画像を取得する処理
                         self.showIconDialog = false
                         user.iconUrl = "https://avatars.githubusercontent.com/u/52849416?v=4"
@@ -135,7 +135,7 @@ struct UserProfileFormView: View {
                 
                 // MARK: Skills
                 VStack(alignment: .leading, spacing: 10) {
-                    Text("Skills")
+                    Text("SKILLS")
                         .font(.largeTitle)
                         .bold()
                     
@@ -143,10 +143,10 @@ struct UserProfileFormView: View {
                         SkillView(skills: user.skills.map({ $0.name }))
                     } else {
                         ContentUnavailableView {
-                            Text("No Skill")
+                            Text("NO_SKILLS")
                                 .bold()
                         } actions: {
-                            Button("追加する") {
+                            Button("ADD_SKILLS") {
                                 print("transition add skill page")
                             }
                         }
@@ -156,7 +156,7 @@ struct UserProfileFormView: View {
                 
                 // MARK: Portfolio
                 VStack(alignment: .leading, spacing: 10) {
-                    Text("Portfolio")
+                    Text("PORTFOLIOS")
                         .font(.largeTitle)
                         .bold()
                     
@@ -185,10 +185,10 @@ struct UserProfileFormView: View {
                         }
                     } else {
                         ContentUnavailableView {
-                            Text("No Portfolio")
+                            Text("NO_PORTLOFIOS")
                                 .bold()
                         } actions: {
-                            Button("追加する") {
+                            Button("ADD_PORTFOLIOS") {
                                 print("transition add portfolio page")
                             }
                         }

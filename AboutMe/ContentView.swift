@@ -61,9 +61,9 @@ struct ContentView: View {
                 
             } else {
                 ContentUnavailableView {
-                    Label("No Item", systemImage: "tray")
+                    Label("NO_PROFILE", systemImage: "tray")
                 } actions: {
-                    NavigationLink("追加する", destination: UserProfileAddView(user: .init()))
+                    NavigationLink("ADD_PROFILE", destination: UserProfileAddView(user: .init()))
                 }
             }
         }

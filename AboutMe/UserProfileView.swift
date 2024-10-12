@@ -15,7 +15,7 @@ struct UserProfileView: View {
     @State private var debug_showDialog: Bool = false
     
     var body: some View {
-        VStack(spacing: 0) {
+        VStack(spacing: 10) {
             // MARK: Icon
             VStack(alignment: .center) {
                 UserIconView(iconUrl: user.iconUrl)
@@ -64,7 +64,7 @@ struct UserProfileView: View {
                 
                 // MARK: Skills
                 VStack(alignment: .leading, spacing: 10) {
-                    Text("Skills")
+                    Text("SKILLS")
                         .font(.largeTitle)
                         .bold()
                     
@@ -72,10 +72,10 @@ struct UserProfileView: View {
                         SkillView(skills: user.skills.map({ $0.name }))
                     } else {
                         ContentUnavailableView {
-                            Text("No Skill")
+                            Text("NO_SKILLS")
                                 .bold()
                         } actions: {
-                            Button("追加する") {
+                            Button("ADD_SKILLS") {
                                 print("transition add skill page")
                             }
                         }
@@ -85,7 +85,7 @@ struct UserProfileView: View {
                 
                 // MARK: Portfolio
                 VStack(alignment: .leading, spacing: 10) {
-                    Text("Portfolio")
+                    Text("PORTFOLIOS")
                         .font(.largeTitle)
                         .bold()
                     
@@ -114,10 +114,10 @@ struct UserProfileView: View {
                         }
                     } else {
                         ContentUnavailableView {
-                            Text("No Portfolio")
+                            Text("NO_PORTLOFIOS")
                                 .bold()
                         } actions: {
-                            Button("追加する") {
+                            Button("ADD_PORTFOLIOS") {
                                 print("transition add portfolio page")
                             }
                         }
