@@ -26,7 +26,7 @@ struct ContentView: View {
     
     var body: some View {
         NavigationStack {
-            if let user = users.first {
+            if let user = users.first(where: { $0.isSelf }) {
                 ScrollView {
                     if !isEditMode {
                         UserProfileView(user: user)
@@ -96,7 +96,8 @@ struct ContentView: View {
         ].enumerated().map { (index, name) in
                 .init(order: index, name: name)
         },
-        portfolios: []
+        portfolios: [],
+        isSelf: true
     )
     
     container.mainContext.insert(user)

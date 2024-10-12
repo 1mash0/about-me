@@ -28,6 +28,8 @@ final class User {
     
     var portfolios: [Portfolio]
     
+    private(set) var isSelf: Bool
+    
     init(
         userId: UUID = UUID(),
         iconUrl: String?,
@@ -38,7 +40,8 @@ final class User {
         otherLinks: [OtherLink],
         about: String,
         skills: [Skill],
-        portfolios: [Portfolio]
+        portfolios: [Portfolio],
+        isSelf: Bool = false
     ) {
         self.userId = userId
         self.iconUrl = iconUrl
@@ -50,6 +53,7 @@ final class User {
         self.about = about
         self.skills = skills
         self.portfolios = portfolios
+        self.isSelf = isSelf
     }
     
     convenience init () {
@@ -62,7 +66,8 @@ final class User {
             otherLinks: [],
             about: "",
             skills: [],
-            portfolios: []
+            portfolios: [],
+            isSelf: true
         )
     }
 }
