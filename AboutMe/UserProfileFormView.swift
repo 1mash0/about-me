@@ -13,42 +13,42 @@ struct UserProfileFormView: View {
     @State private var showIconDialog = false
     
     var body: some View {
-        ScrollView {
-            VStack(spacing: 30) {
-                // MARK: Icon
-                VStack(alignment: .center) {
-                    Button {
-                        self.showIconDialog = true
-                    } label: {
-                        UserIconView(iconUrl: user.iconUrl)
-                    }
-                    .clipShape(Circle())
-                    .frame(width: 150, height: 150)
-                    .confirmationDialog(
-                        "アイコン画像の変更",
-                        isPresented: $showIconDialog,
-                        titleVisibility: .visible
-                    ) {
-                        Button("GitHub から取得") {
-                            // TODO: GitHubからアイコン画像を取得する処理
-                            self.showIconDialog = false
-                            user.iconUrl = "https://avatars.githubusercontent.com/u/52849416?v=4"
-                        }.disabled(user.githubID == nil)
-                        
-                        Button("X から取得") {
-                            // TODO: Xからアイコン画像を取得する処理
-                            self.showIconDialog = false
-                            user.iconUrl = "https://avatars.githubusercontent.com/u/52849416?v=4"
-                        }.disabled(user.xID == nil)
-                        
-                        Button("削除", role: .destructive) {
-                            self.showIconDialog = false
-                            user.iconUrl = nil
-                        }
+        VStack(spacing: 0) {
+            // MARK: Icon
+            VStack(alignment: .center) {
+                Button {
+                    self.showIconDialog = true
+                } label: {
+                    UserIconView(iconUrl: user.iconUrl)
+                }
+                .clipShape(Circle())
+                .frame(width: 150, height: 150)
+                .confirmationDialog(
+                    "アイコン画像の変更",
+                    isPresented: $showIconDialog,
+                    titleVisibility: .visible
+                ) {
+                    Button("GitHub から取得") {
+                        // TODO: GitHubからアイコン画像を取得する処理
+                        self.showIconDialog = false
+                        user.iconUrl = "https://avatars.githubusercontent.com/u/52849416?v=4"
+                    }.disabled(user.githubID == nil)
+                    
+                    Button("X から取得") {
+                        // TODO: Xからアイコン画像を取得する処理
+                        self.showIconDialog = false
+                        user.iconUrl = "https://avatars.githubusercontent.com/u/52849416?v=4"
+                    }.disabled(user.xID == nil)
+                    
+                    Button("削除", role: .destructive) {
+                        self.showIconDialog = false
+                        user.iconUrl = nil
                     }
                 }
-                .padding()
-                
+            }
+            .padding()
+            
+            VStack(spacing: 30) {
                 // MARK: Name
                 VStack(alignment: .leading, spacing: 16) {
                     VStack(spacing: 2) {
@@ -196,8 +196,8 @@ struct UserProfileFormView: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .frame(maxWidth: .infinity)
-            .padding(16)
         }
+        .frame(maxWidth: .infinity)
+        .padding(16)
     }
 }

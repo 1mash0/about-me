@@ -18,7 +18,9 @@ struct UserProfileAddView: View {
     }
     
     var body: some View {
-        UserProfileFormView(user: user)
+        ScrollView {
+            UserProfileFormView(user: user)
+        }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button("Add") {

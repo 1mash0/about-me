@@ -125,7 +125,7 @@ struct UserProfileView: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
-         
+            
             Spacer(minLength: 120)
             Button("削除する", role: .destructive) {
                 debug_showDialog = true
