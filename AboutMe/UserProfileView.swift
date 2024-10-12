@@ -125,10 +125,9 @@ struct UserProfileView: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
-            
-#if DEBUG
+         
             Spacer(minLength: 120)
-            Button("debug_削除", role: .destructive) {
+            Button("削除する", role: .destructive) {
                 debug_showDialog = true
             }
             .confirmationDialog(
@@ -149,7 +148,6 @@ struct UserProfileView: View {
                 }
             }
             .padding()
-#endif
         }
         .frame(maxWidth: .infinity)
         .padding(16)
