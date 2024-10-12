@@ -11,20 +11,12 @@ struct UserProfileAddView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     
-    @State var iconUrl: String?
-    @State var name: String?
-    @State var nickname: String?
-    @State var githubID: String?
-    @State var xID: String?
-    @State var otherLinks: [String] = []
-    @State var about: String?
-    @State var skills: [String] = []
-    @State var portfolios: [String] = []
+    @State var user: User
     
     @State private var showIconDialog = false
     
     private var isFormInvalid: Bool {
-        name?.isEmpty ?? true || about?.isEmpty ?? true
+        user.name.isEmpty || user.about.isEmpty
     }
     
     var body: some View {
@@ -35,7 +27,7 @@ struct UserProfileAddView: View {
                     Button {
                         self.showIconDialog = true
                     } label: {
-                        UserIconView(iconUrl: iconUrl)
+                        UserIconView(iconUrl: user.iconUrl)
                     }
                     .clipShape(Circle())
                     .frame(width: 150, height: 150)
@@ -44,20 +36,21 @@ struct UserProfileAddView: View {
                         isPresented: $showIconDialog,
                         titleVisibility: .visible
                     ) {
-                        Button("X から取得") {
-                            // Xからアイコン画像を取得する処理
-                            self.showIconDialog = false
-                        }.disabled(xID == nil)
-                        
                         Button("GitHub から取得") {
-                            // GitHubからアイコン画像を取得する処理
+                            // TODO: GitHubからアイコン画像を取得する処理
                             self.showIconDialog = false
-                            iconUrl = "https://avatars.githubusercontent.com/u/52849416?v=4"
-                        }.disabled(githubID == nil)
+                            user.iconUrl = "https://avatars.githubusercontent.com/u/52849416?v=4"
+                        }.disabled(user.githubID == nil)
+                        
+                        Button("X から取得") {
+                            // TODO: Xからアイコン画像を取得する処理
+                            self.showIconDialog = false
+                            user.iconUrl = "https://avatars.githubusercontent.com/u/52849416?v=4"
+                        }.disabled(user.xID == nil)
                         
                         Button("削除", role: .destructive) {
                             self.showIconDialog = false
-                            iconUrl = nil
+                            user.iconUrl = nil
                         }
                     }
                 }
@@ -66,21 +59,18 @@ struct UserProfileAddView: View {
                 // MARK: Name
                 VStack(alignment: .leading, spacing: 16) {
                     VStack(spacing: 2) {
-                        TextField("Enter Your Name", text: Binding(
-                            get: { name ?? "" },
-                            set: { name = $0.isEmpty ? nil : $0 }
-                        ))
+                        TextField("Enter Your Name", text: $user.name)
                         .bold()
                         .font(.title)
                         Divider()
                             .frame(height: 0.5)
-                            .background((name?.isEmpty) ?? true ? .red : .black)
+                            .background(user.name.isEmpty ? .red : .black)
                     }
                     
                     VStack(spacing: 2) {
                         TextField("Enter Your Nickname", text: Binding(
-                            get: { nickname ?? "" },
-                            set: { nickname = $0.isEmpty ? nil : $0 }
+                            get: { user.nickname ?? "" },
+                            set: { user.nickname = $0.isEmpty ? nil : $0 }
                         ))
                         .bold()
                         .font(.title3)
@@ -99,8 +89,8 @@ struct UserProfileAddView: View {
                             .frame(height: 22)
                         VStack(spacing: 2) {
                             TextField("Enter your Github ID", text: Binding(
-                                get: { githubID ?? "" },
-                                set: { githubID = $0.isEmpty ? nil : $0 }
+                                get: { user.githubID ?? "" },
+                                set: { user.githubID = $0.isEmpty ? nil : $0 }
                             ))
                             .bold()
                             .font(.headline)
@@ -118,8 +108,8 @@ struct UserProfileAddView: View {
                             .frame(height: 22)
                         VStack(spacing: 2) {
                             TextField("Enter your X ID", text: Binding(
-                                get: { xID ?? "" },
-                                set: { xID = $0.isEmpty ? nil : $0 }
+                                get: { user.xID ?? "" },
+                                set: { user.xID = $0.isEmpty ? nil : $0 }
                             ))
                             .bold()
                             .font(.headline)
@@ -139,16 +129,13 @@ struct UserProfileAddView: View {
                     VStack(spacing: 2) {
                         TextField(
                             "Enter Self-introduction",
-                            text: Binding(
-                                get: { about ?? "" },
-                                set: { about = $0.isEmpty ? nil : $0 }
-                            ),
+                            text: $user.about,
                             axis: .vertical
                         )
                         .font(.headline)
                         Divider()
                             .frame(height: 0.5)
-                            .background((about?.isEmpty) ?? true ? .red : .black)
+                            .background(user.about.isEmpty ? .red : .black)
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -159,8 +146,8 @@ struct UserProfileAddView: View {
                         .font(.largeTitle)
                         .bold()
                     
-                    if !skills.isEmpty {
-                        SkillView(skills: skills.map({ $0 }))
+                    if !user.skills.isEmpty {
+                        SkillView(skills: user.skills.map({ $0.name }))
                     } else {
                         ContentUnavailableView {
                             Text("No Skill")
@@ -180,7 +167,7 @@ struct UserProfileAddView: View {
                         .font(.largeTitle)
                         .bold()
                     
-                    if !portfolios.isEmpty {
+                    if !user.portfolios.isEmpty {
 #if os(iOS)
                         let count = 2
 #else
@@ -192,13 +179,13 @@ struct UserProfileAddView: View {
                             count: count
                         )
                         LazyVGrid(columns: grids, spacing: 16) {
-                            ForEach(portfolios, id: \.self) { portfolio in
+                            ForEach(user.portfolios, id: \.self) { portfolio in
                                 VStack(spacing: 0) {
                                     Color.gray
                                         .aspectRatio(1.7, contentMode: .fit)
                                         .clipShape(RoundedRectangle(cornerRadius: 6))
                                     
-                                    Text(portfolio)
+                                    Text(portfolio.title)
                                         .font(.headline)
                                 }
                             }
@@ -222,34 +209,26 @@ struct UserProfileAddView: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button("Add") {
-                    let user: User = .init(
-                        userId: UUID(),
-                        iconUrl: iconUrl,
-                        name: name!,
-                        nickname: nickname,
-                        githubID: githubID,
-                        xID: xID,
-                        otherLinks: [],
-                        about: about!,
-                        skills: [],
-                        portfolios: []
-                    )
-                    modelContext.insert(user)
-                    do {
-                        try modelContext.save()
-                    } catch {
-                        modelContext.rollback()
-                    }
-                    
-                    dismiss()
+                    addUser()
                 }.disabled(isFormInvalid)
             }
         }
     }
+    
+    private func addUser() {
+        modelContext.insert(user)
+        do {
+            try modelContext.save()
+        } catch {
+            modelContext.rollback()
+        }
+        
+        dismiss()
+    }
 }
 
 #Preview {
-    UserProfileAddView()
+    UserProfileAddView(user: .init())
 }
 
 

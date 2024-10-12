@@ -16,6 +16,7 @@ struct UserIconView: View {
             AsyncImage(url: url) { phase in
                 if let image = phase.image {
                     image.resizable()
+                        .overlay(Circle().stroke(.gray.opacity(0.5), lineWidth: 0.5))
                 } else if phase.error != nil {
                     blackIconView {
                         VStack(spacing: 10) {

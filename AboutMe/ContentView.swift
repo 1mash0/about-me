@@ -63,7 +63,7 @@ struct ContentView: View {
                 ContentUnavailableView {
                     Label("No Item", systemImage: "tray")
                 } actions: {
-                    NavigationLink("追加する", destination: UserProfileAddView())
+                    NavigationLink("追加する", destination: UserProfileAddView(user: .init()))
                 }
             }
         }

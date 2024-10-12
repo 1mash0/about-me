@@ -29,7 +29,7 @@ final class User {
     var portfolios: [Portfolio]
     
     init(
-        userId: UUID,
+        userId: UUID = UUID(),
         iconUrl: String?,
         name: String,
         nickname: String?,
@@ -50,6 +50,20 @@ final class User {
         self.about = about
         self.skills = skills
         self.portfolios = portfolios
+    }
+    
+    convenience init () {
+        self.init(
+            iconUrl: nil,
+            name: "",
+            nickname: nil,
+            githubID: nil,
+            xID: nil,
+            otherLinks: [],
+            about: "",
+            skills: [],
+            portfolios: []
+        )
     }
 }
 
